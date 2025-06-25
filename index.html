@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MovieEnjoyer - Autenticação</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="login">
+<div class="container">
+    <div id="login-form-div">
+        <h2>Login</h2>
+        <form>
+            <input type="email" id="login-email" placeholder="Email" required />
+            <input type="password" id="login-password" placeholder="Senha" required />
+        </form>
+        <button onclick="login()">Entrar</button>
+        <a href="register.html">Ainda não tem conta?</a>
+    </div>
+</div>
+
+<script>
+
+    async function login() {
+
+        const data = {
+            email: document.getElementById('login-email').value.trim(),
+            password: document.getElementById('login-password').value,
+        };
+
+        if (!data.email || !data.password) {
+            alert('Por favor, preencha email e senha.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                credentials: 'include', // para enviar cookies, se usar sessão
+            });
+
+            const jsonResponse = await response.json();
+
+            if (response.ok) {
+                window.location.href = 'home.html';
+            } else {
+                alert(jsonResponse.error || 'Credenciais inválidas.');
+            }
+        } catch (err) {
+            alert('Erro na comunicação com o servidor.');
+            console.error(err);
+        }
+    }
+</script>
+
+</body>
+</html>

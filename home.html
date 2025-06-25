@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Filmes Populares</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="home">
+
+<main class="container">
+    <h1>Filmes mais assistidos</h1>
+    <div id="movies-container"></div>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch("http://localhost:5000/movies")
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("movies-container");
+                container.innerHTML = ''; // limpa antes
+                data.forEach(movie => {
+                    const card = document.createElement("div");
+                    card.className = "movie-card";
+                    card.innerHTML = `
+              <h3>${movie.name}</h3>
+              <p>${movie.genre} (${movie.year})</p>
+              <p><strong>Visualizações:</strong> ${movie.views}</p>
+            `;
+                    // Adiciona clique que redireciona para movie.html com o ID do filme
+                    card.addEventListener("click", () => {
+                        window.location.href = `movie.html?id=${movie.id}`;
+                    });
+
+                    container.appendChild(card);
+                });
+            });
+    });
+</script>
+
+</body>
+</html>

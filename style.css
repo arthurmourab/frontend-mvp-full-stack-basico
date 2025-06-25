@@ -1,0 +1,65 @@
+/*GLOBAL*/
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+input {
+    padding: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+    cursor: auto;
+}
+
+/*LOGIN*/
+.login {
+    a:link, a:visited {
+        color: #fff;
+    }
+}
+
+/*REGISTER*/
+.register {
+    a:link, a:visited {
+        color: #fff;
+    }
+}
+
+/*HOME*/
+.home {
+    #movies-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        justify-content: start;
+        align-items: center;
+
+        margin-left: 56px;
+    }
+
+    .movie-card {
+        width: 320px;
+
+        border-style: outset;
+        border-radius: 24px;
+        border-width: 2px;
+        border-color: white;
+
+        margin-right: 24px;
+        padding: 8px;
+    }
+
+
+}
