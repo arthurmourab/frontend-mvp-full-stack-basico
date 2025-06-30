@@ -11,6 +11,9 @@
 <main class="container">
     <h1>Filmes mais populares</h1>
     <div id="movies-container"></div>
+    <div id="movie-detail-overlay" style="display: none;">
+        <div id="movie-detail"></div>
+    </div>
 </main>
 
 <script>
@@ -18,25 +21,146 @@
         fetch("http://localhost:5000/movies")
             .then(response => response.json())
             .then(data => {
-                const container = document.getElementById("movies-container");
-                container.innerHTML = ''; // limpa antes
+                const moviesContainer = document.getElementById("movies-container");
+                moviesContainer.innerHTML = ''; // limpa antes
                 data.forEach(movie => {
                     const card = document.createElement("div");
+                    const movieImgSrc = `./img/${movie.cover}`;
+
                     card.className = "movie-card";
                     card.innerHTML = `
-              <h3>${movie.name}</h3>
-              <p>${movie.genre} (${movie.year})</p>
-              <p><strong>Visualizações:</strong> ${movie.views}</p>
-            `;
-                    // Adiciona clique que redireciona para movie.html com o ID do filme
+                        <img src="${movieImgSrc}" width="120">
+                        <h3>${movie.name}</h3>
+                        <p>${movie.genre} (${movie.year})</p>
+
+                    `;
                     card.addEventListener("click", () => {
-                        window.location.href = `movie.html?id=${movie.id}`;
+                        getMovieDetail(movie.id);
                     });
 
-                    container.appendChild(card);
+                    moviesContainer.appendChild(card);
                 });
             });
     });
+
+    function getMovieDetail(id) {
+        const overlay = document.getElementById("movie-detail-overlay");
+        const movieDetailOverlay = document.getElementById("movie-detail");
+
+        movieDetailOverlay.innerHTML = ''; // limpa antes
+
+        fetch(`http://localhost:5000/movies/${id}`)
+            .then(response => response.json())
+            .then(movie => {
+                const movieImgSrc = `./img/${movie.cover}`;
+                movieDetailOverlay.innerHTML = `
+                <img src="${movieImgSrc}" width="200">
+                <h3>${movie.name}</h3>
+                <p><strong>Gênero:</strong> ${movie.genre}</p>
+                <p><strong>Ano:</strong> ${movie.year}</p>
+                <p><strong>Visualizações:</strong> ${movie.views ? movie.views : 0}</p>
+                <p><strong>Avaliação média:</strong> ${movie.average_rating ? movie.average_rating : '-'}</p>
+                <button onclick="watchMovie(${movie.id})">Marcar como assistido</button>
+                <button onclick="reviewMovie(${movie.id})">Avaliar</button>
+            `;
+
+                overlay.style.display = 'flex';
+            });
+
+        // Fecha o modal ao clicar fora da div
+        overlay.onclick = (event) => {
+            if (event.target === overlay) {
+                overlay.style.display = 'none';
+            }
+        };
+    }
+
+    async function reviewMovie(id) {
+        const movieDetail = document.getElementById("movie-detail");
+        const reviewForm = document.createElement("div");
+
+        reviewForm.id = "movie-review-form";
+        reviewForm.innerHTML = `
+            <h2>Escreva sua avaliação</h2>
+            <input type="text" id="movie-review-title" name="movie-review-title" placeholder="Título" required/>
+            <input type="number" id="movie-review-rating" name="movie-review-rating" min="1" max="10" step="0.5" required>
+            <textarea id="movie-review-content" name="movie-review-content" placeholder="Escreva aqui o que achou sobre o filme." cols="52" rows="8" required></textarea>
+        `;
+
+        const cancelButton = document.createElement("button");
+        cancelButton.textContent = "Cancelar";
+        cancelButton.addEventListener("click", () => {
+            reviewForm.innerHTML = '';
+            reviewForm.remove();
+        });
+
+        const saveButton = document.createElement("button");
+        saveButton.textContent = "Salvar";
+        saveButton.addEventListener("click", async () => {
+            const data = {
+                movie_id: id,
+                title: document.getElementById("movie-review-title").value,
+                content: document.getElementById("movie-review-content").value,
+                rating: Number(document.getElementById("movie-review-rating").value)
+            }
+
+            console.log(data);
+
+            const response = await fetch('http://localhost:5000/reviwes/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                credentials: 'include', // para enviar cookies, se usar sessão
+            });
+
+            const jsonResponse = await response.json();
+
+            if (response.ok) {
+                alert(jsonResponse.message);
+                window.location.href = 'home.html';
+            } else {
+                alert(jsonResponse.error || 'Credenciais inválidas.');
+            }
+        })
+
+        reviewForm.appendChild(cancelButton);
+        reviewForm.appendChild(saveButton);
+        movieDetail.appendChild(reviewForm);
+
+    }
+
+    async function watchMovie(id) {
+        const data = {
+            movie_id: id
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/watched/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+                credentials: 'include', // para enviar cookies, se usar sessão
+            });
+
+            const jsonResponse = await response.json();
+
+            if (response.ok) {
+                alert(jsonResponse.message);
+                window.location.href = 'home.html';
+            } else {
+                alert(jsonResponse.error || 'Credenciais inválidas.');
+            }
+
+        } catch (error) {
+            alert('Erro na comunicação com o servidor.');
+            console.error(error);
+        }
+    }
+
 </script>
 
 </body>

@@ -68,6 +68,13 @@ h1 {
         margin-right: 56px;
     }
 
+    #movie-review-form {
+        display: block;
+        input {
+            margin-bottom: 12px;
+        }
+    }
+
     .movie-card {
         margin-right: 24px;
         margin-bottom: 16px;
