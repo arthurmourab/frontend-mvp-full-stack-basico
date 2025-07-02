@@ -1,119 +1,241 @@
-/*GLOBAL*/
+/*cor de fundo principal: #121212*/
+/*cor de fundo dos componentes: #1E1E1E*/
+/*texto primário: #E1E1E1*/
+/*texto secundário: #AAAAAA*/
+/*destaques (botões): #00C853*/
+/*erro / alerta: #FF5252*/
+/*borda ou separador: #2E2E2E*/
+
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-
-input {
-    padding: 0.8rem;
-    border: none;
-    border-radius: 6px;
-    outline: none;
-}
-
-a:link, a:visited {
-    text-decoration: none;
-    cursor: pointer;
-}
-
-button {
-    margin-top: 12px;
-    padding: 8px;
-    min-width: 80px;
-
-    border-radius: 12px;
-    border-color: white;
-
-    cursor: pointer;
-    font-family: 'Segoe UI', sans-serif;
+    background-color: #121212;
+    color: #E1E1E1;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
 }
 
 h1 {
-    font-size: 48px;
-    text-align: center;
-    margin-bottom: 24px;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
-/*LOGIN*/
-.login {
-    a:link, a:visited {
-        color: #fff;
-    }
+h2 {
+    font-size: 18px;
+    font-weight: 600;
 }
 
-/*REGISTER*/
-.register {
-    a:link, a:visited {
-        color: #fff;
-    }
+button {
+    background-color: #00C853;         /* Verde principal */
+    color: #ffffff;                    /* Texto branco */
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/*HOME*/
-.home {
-    #movies-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-
-        justify-content: start;
-        align-items: center;
-
-        margin-left: 56px;
-        margin-right: 56px;
-    }
-
-    #movie-review-form {
-        display: block;
-        input {
-            margin-bottom: 12px;
-        }
-    }
-
-    .movie-card {
-        margin-right: 24px;
-        margin-bottom: 16px;
-        padding: 8px;
-
-        min-width: 360px;
-
-        border-style: outset;
-        border-radius: 24px;
-        border-width: 2px;
-        border-color: white;
-
-        cursor: pointer;
-
-        background-color: rgba(0, 0, 0, 0.3);
-    }
-
-    #movie-detail-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9998;
-    }
-
-    #movie-detail {
-        background: #010203;
-        padding: 20px;
-        border-radius: 12px;
-        max-width: 90%;
-        width: 400px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-    }
-
+button:hover {
+    background-color: #00e676;         /* Tom mais claro ao hover */
+    transform: scale(1.02);            /* Leve ampliação */
 }
+
+button:disabled {
+    background-color: #444;
+    cursor: not-allowed;
+}
+
+input {
+    background-color: #1E1E1E;         /* Fundo escuro do campo */
+    border: 1px solid #2E2E2E;         /* Borda sutil */
+    color: #E1E1E1;                    /* Texto claro */
+    padding: 12px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: #777;
+}
+
+input:focus {
+    border-color: #00C853;
+    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.2);
+}
+
+#movies-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.movie-card {
+    background-color: #1E1E1E;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.movie-card h2 {
+    font-size: 16px;
+    color: #E1E1E1;
+    margin: 12px;
+    margin-bottom: 4px;
+}
+
+.movie-card p {
+    font-size: 13px;
+    color: #AAAAAA;
+    margin: 0 12px 12px 12px;
+}
+
+.movie-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Overlay escuro cobrindo toda a tela */
+#movie-detail-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* fundo semi-transparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+/* Modal centralizado */
+#movie-detail {
+    background-color: #1E1E1E;
+    padding: 16px;
+    border-radius: 10px;
+    max-width: 320px;
+    width: 90%;
+    color: #E1E1E1;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Poster */
+#movie-detail img {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+/* Título */
+#movie-detail h2 {
+    margin-bottom: 10px;
+    color: #00C853;
+}
+
+/* Parágrafos */
+#movie-detail p {
+    color: #CCCCCC;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+
+.modal-buttons button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#movie-review-form {
+    margin-left: 24px;
+    padding: 16px;
+    background-color: #2A2A2A;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+    overflow-y: auto;
+}
+
+#movie-review-form h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #00C853;
+}
+
+#movie-review-form input,
+#movie-review-form textarea {
+    background-color: #1E1E1E;
+    border: 1px solid #333;
+    color: #E1E1E1;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#movie-review-form input::placeholder,
+#movie-review-form textarea::placeholder {
+    color: #777;
+}
+
+#movie-review-form input:focus,
+#movie-review-form textarea:focus {
+    outline: none;
+    border-color: #00C853;
+    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.2);
+}
+
+#movie-review-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#review-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#review-buttons button {
+    background-color: #00C853;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#review-buttons button:hover {
+    background-color: #00e676;
+    transform: scale(1.02);
+}
+
+
 

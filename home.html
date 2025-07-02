@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Filmes mais populares</title>
+    <title>Filmes mais assistidos</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body class="home">
 
 <main class="container">
     <h1>Filmes mais populares</h1>
-    <div id="movies-container"></div>
+    <div id="movies-container" style="display: flex; flex-direction: row; flex-wrap: wrap"></div>
     <div id="movie-detail-overlay" style="display: none;">
         <div id="movie-detail"></div>
+        <div id="movie-review-form"></div>
     </div>
 </main>
 
@@ -30,9 +31,8 @@
                     card.className = "movie-card";
                     card.innerHTML = `
                         <img src="${movieImgSrc}" width="120">
-                        <h3>${movie.name}</h3>
+                        <h2>${movie.name}</h2>
                         <p>${movie.genre} (${movie.year})</p>
-
                     `;
                     card.addEventListener("click", () => {
                         getMovieDetail(movie.id);
@@ -55,13 +55,16 @@
                 const movieImgSrc = `./img/${movie.cover}`;
                 movieDetailOverlay.innerHTML = `
                 <img src="${movieImgSrc}" width="200">
-                <h3>${movie.name}</h3>
+                <h2>${movie.name}</h2>
                 <p><strong>Gênero:</strong> ${movie.genre}</p>
                 <p><strong>Ano:</strong> ${movie.year}</p>
                 <p><strong>Visualizações:</strong> ${movie.views ? movie.views : 0}</p>
                 <p><strong>Avaliação média:</strong> ${movie.average_rating ? movie.average_rating : '-'}</p>
-                <button onclick="watchMovie(${movie.id})">Marcar como assistido</button>
-                <button onclick="reviewMovie(${movie.id})">Avaliar</button>
+                <div class="modal-buttons">
+                    <button onclick="watchMovie(${movie.id})">Marcar como assistido</button>
+                    <button onclick="reviewMovie(${movie.id})">Avaliar</button>
+                </div>
+
             `;
 
                 overlay.style.display = 'flex';
@@ -76,22 +79,25 @@
     }
 
     async function reviewMovie(id) {
-        const movieDetail = document.getElementById("movie-detail");
-        const reviewForm = document.createElement("div");
+        const reviewForm = document.getElementById("movie-review-form");
 
-        reviewForm.id = "movie-review-form";
+        reviewForm.innerHTML = '';
+
         reviewForm.innerHTML = `
             <h2>Escreva sua avaliação</h2>
-            <input type="text" id="movie-review-title" name="movie-review-title" placeholder="Título" required/>
-            <input type="number" id="movie-review-rating" name="movie-review-rating" min="1" max="10" step="0.5" required>
-            <textarea id="movie-review-content" name="movie-review-content" placeholder="Escreva aqui o que achou sobre o filme." cols="52" rows="8" required></textarea>
+            <form>
+                <input type="text" id="movie-review-title" name="movie-review-title" placeholder="Título" required/>
+                <input type="number" id="movie-review-rating" name="movie-review-rating" min="1" max="10" step="0.5" required>
+                <textarea id="movie-review-content" name="movie-review-content" placeholder="Escreva aqui o que achou sobre o filme." cols="52" rows="8" required></textarea>
+            </form>
+
+            <div id="review-buttons"></div>
         `;
 
         const cancelButton = document.createElement("button");
         cancelButton.textContent = "Cancelar";
         cancelButton.addEventListener("click", () => {
             reviewForm.innerHTML = '';
-            reviewForm.remove();
         });
 
         const saveButton = document.createElement("button");
@@ -104,9 +110,7 @@
                 rating: Number(document.getElementById("movie-review-rating").value)
             }
 
-            console.log(data);
-
-            const response = await fetch('http://localhost:5000/reviwes/', {
+            const response = await fetch('http://localhost:5000/reviews/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -117,18 +121,20 @@
 
             const jsonResponse = await response.json();
 
-            if (response.ok) {
-                alert(jsonResponse.message);
+            if (response.status === 201) {
                 window.location.href = 'home.html';
-            } else {
+            }
+            else if (jsonResponse.status === 200) {
+                alert(jsonResponse.message);
+            }
+             else {
                 alert(jsonResponse.error || 'Credenciais inválidas.');
             }
         })
 
-        reviewForm.appendChild(cancelButton);
-        reviewForm.appendChild(saveButton);
-        movieDetail.appendChild(reviewForm);
-
+        const reviewButtons = document.getElementById('review-buttons');
+        reviewButtons.appendChild(cancelButton);
+        reviewButtons.appendChild(saveButton);
     }
 
     async function watchMovie(id) {
@@ -148,10 +154,14 @@
 
             const jsonResponse = await response.json();
 
-            if (response.ok) {
-                alert(jsonResponse.message);
+
+            if (response.status === 201) {
                 window.location.href = 'home.html';
-            } else {
+            }
+            else if (response.status === 200) {
+                alert(jsonResponse.message);
+            }
+            else {
                 alert(jsonResponse.error || 'Credenciais inválidas.');
             }
 
