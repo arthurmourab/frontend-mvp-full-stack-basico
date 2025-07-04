@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Filmes mais assistidos</title>
+    <title>MovieEnjoyer - Home</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body class="home">
 
 <main class="container">
-    <h1>Filmes mais populares</h1>
+    <div class="home-header-container">
+        <div class="logo-container" style="margin-bottom: 0">
+            <img src="img/logo_no_bg.png" alt="MovieEnjoyer Logo" style="max-width: 180px"/>
+        </div>
+        <h1 style="margin-left: 32px">Filmes mais populares</h1>
+    </div>
+
     <div id="movies-container" style="display: flex; flex-direction: row; flex-wrap: wrap"></div>
     <div id="movie-detail-overlay" style="display: none;">
         <div id="movie-detail"></div>
         <div id="movie-review-form"></div>
     </div>
 </main>
+
+<footer class="app-footer">
+    <p>© 2025 MovieEnjoyer — Desenvolvido por Arthur Moura Bernardo</p>
+</footer>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -122,6 +132,7 @@
             const jsonResponse = await response.json();
 
             if (response.status === 201) {
+                if (jsonResponse.message) alert(jsonResponse.message);
                 window.location.href = 'home.html';
             }
             else if (jsonResponse.status === 200) {
@@ -156,6 +167,7 @@
 
 
             if (response.status === 201) {
+                if (jsonResponse.message) alert(jsonResponse.message);
                 window.location.href = 'home.html';
             }
             else if (response.status === 200) {

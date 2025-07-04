@@ -10,7 +10,9 @@
 
 <body class="login">
 <div class="container">
-    <h1>MovieEnjoyer</h1>
+    <div class="logo-container">
+        <img src="img/logo_no_bg.png" alt="MovieEnjoyer Logo" />
+    </div>
     <div id="login-form-div">
         <h2>Login</h2>
         <form>
@@ -22,6 +24,9 @@
     </div>
 </div>
 
+<footer class="app-footer">
+    <p>© 2025 MovieEnjoyer — Desenvolvido por Arthur Moura Bernardo</p>
+</footer>
 <script>
 
     async function login() {
@@ -48,6 +53,7 @@
             const jsonResponse = await response.json();
 
             if (response.ok) {
+                if (jsonResponse.message) alert(jsonResponse.message);
                 window.location.href = 'home.html';
             } else {
                 alert(jsonResponse.error || 'Credenciais inválidas.');
