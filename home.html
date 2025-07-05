@@ -29,7 +29,9 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:5000/movies")
+        fetch("http://localhost:5000/movies", {
+            credentials: 'include'
+        })
             .then(response => response.json())
             .then(data => {
                 const moviesContainer = document.getElementById("movies-container");
@@ -59,7 +61,9 @@
 
         movieDetailOverlay.innerHTML = ''; // limpa antes
 
-        fetch(`http://localhost:5000/movies/${id}`)
+        fetch(`http://localhost:5000/movies/${id}`, {
+            credentials: 'include'
+        })
             .then(response => response.json())
             .then(movie => {
                 const movieImgSrc = `./img/${movie.cover}`;
