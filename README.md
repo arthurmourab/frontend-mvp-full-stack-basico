@@ -38,12 +38,10 @@ Na pasta raíz do repositório:
 python -m http.server 8080
 ```
 
-### 🔍 5. Abra sua aplicação
+### 🔍 3. Abra sua aplicação
 Acesse <http://localhost:8080/> para visualizar e interagir com a aplicação
 
 <br />
 
 #### Observações
 Algumas funcionalidades (session, request, @app.route, etc..) podem não funcionar caso o arquivo index.html seja aberto diretamente no navegador
-
-
