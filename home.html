@@ -140,7 +140,7 @@
                     if (jsonResponse.message) alert(jsonResponse.message);
                     window.location.href = 'home.html';
                 }
-                else if (jsonResponse.status === 200) {
+                else if (response.status === 200) {
                     alert(jsonResponse.message);
                 }
                 else {
