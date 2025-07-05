@@ -124,26 +124,32 @@
                 rating: Number(document.getElementById("movie-review-rating").value)
             }
 
-            const response = await fetch('http://localhost:5000/reviews/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-                credentials: 'include', // para enviar cookies, se usar sessão
-            });
+            try {
+                const response = await fetch('http://localhost:5000/reviews/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                    credentials: 'include', // para enviar cookies, se usar sessão
+                });
 
-            const jsonResponse = await response.json();
+                const jsonResponse = await response.json();
 
-            if (response.status === 201) {
-                if (jsonResponse.message) alert(jsonResponse.message);
-                window.location.href = 'home.html';
-            }
-            else if (jsonResponse.status === 200) {
-                alert(jsonResponse.message);
-            }
-             else {
-                alert(jsonResponse.error || 'Credenciais inválidas.');
+                if (response.status === 201) {
+                    if (jsonResponse.message) alert(jsonResponse.message);
+                    window.location.href = 'home.html';
+                }
+                else if (jsonResponse.status === 200) {
+                    alert(jsonResponse.message);
+                }
+                else {
+                    alert(jsonResponse.error || 'Credenciais inválidas.');
+                }
+
+            } catch (error) {
+                alert('Erro na comunicação com o servidor.');
+                console.error(error);
             }
         })
 
